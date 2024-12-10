@@ -1,9 +1,15 @@
 package org.example;
 
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
+import java.util.stream.Stream;
+
 public class StreamsExample {
 
     public static void main(final String[] args) {
@@ -29,27 +35,69 @@ public class StreamsExample {
 
         banner("Active authors");
         // TODO With functional interfaces declared
+        Predicate<Author> activeAuthorsPredicate = new Predicate<Author>() {
+            @Override
+            public boolean test(Author author) {
+                return author.active;
+            }
+        };
+        authors.stream().filter(activeAuthorsPredicate).forEach(authorPrintConsumer);
 
         banner("Active authors - lambda");
         // TODO With functional interfaces used directly
+        authors.stream().filter(author -> author.active).forEach(System.out::println);
 
         banner("Active books for all authors");
         // TODO With functional interfaces declared
-
+       Predicate<Book> publishedBookPredicate = new Predicate<Book>() {
+           @Override
+           public boolean test(Book book) {
+               return book.published;
+           }
+       };
+       Consumer<Book> bookConsumer = new Consumer<Book>() {
+           @Override
+           public void accept(Book book) {
+               System.out.println(book);
+           }
+       };
+        Function<Author, Stream<Book>> bookFunction = new Function<Author, Stream<Book>>() {
+            @Override
+            public Stream<Book> apply(Author author) {
+                return author.books.stream();
+            }
+        };
+       authors.stream().flatMap(bookFunction).filter(publishedBookPredicate).forEach(bookConsumer);
         banner("Active books for all authors - lambda");
         // TODO With functional interfaces used directly
+        authors.stream().flatMap(author -> author.books.stream()).filter(book -> book.published).forEach(System.out::println);
 
         banner("Average price for all books in the library");
         // TODO With functional interfaces declared
+        ToIntFunction<Book> sumBooks = new ToIntFunction<Book>() {
+            @Override
+            public int applyAsInt(Book value) {
+                return value.price;
+            }
+        };
+        int sum = authors.stream().flatMap(bookFunction).mapToInt(sumBooks).sum();
+        long count = authors.stream().flatMap(bookFunction).count();
+        System.out.println((double)sum/count);
 
         banner("Average price for all books in the library - lambda");
         // TODO With functional interfaces used directly
+        sum = authors.stream().flatMap(author -> author.books.stream()).mapToInt(book -> book.price).sum();
+        count = authors.stream().flatMap(author -> author.books.stream()).count();
+        System.out.println((double)sum/count);
 
         banner("Active authors that have at least one published book");
         // TODO With functional interfaces declared
 
+        authors.stream().filter(activeAuthorsPredicate).filter(author -> author.books.stream().anyMatch(publishedBookPredicate)).forEach(authorPrintConsumer);
+
         banner("Active authors that have at least one published book - lambda");
         // TODO With functional interfaces used directly
+        authors.stream().filter(author -> author.active&&author.books.stream().anyMatch(book -> book.published)).forEach(System.out::println);
 
     }
 
