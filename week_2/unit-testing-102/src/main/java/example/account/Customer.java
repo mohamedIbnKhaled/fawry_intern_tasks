@@ -39,5 +39,6 @@ public class Customer {
 
     public void setVip(boolean vip) {
         this.vip = vip;
+        if(vip)setCreditAllowed(true);
     }
 }
