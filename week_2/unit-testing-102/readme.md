@@ -1,6 +1,6 @@
 # jacoco report images
-![jacoco report](docs/images/jacoco1.png)
+![jacoco report](week_2/unit-testing-102/docs/images/jacoco1.png)
 
-![jacoco report](docs/images/jacoco2.png)
+![jacoco report](week_2/unit-testing-102/docs/images/jacoco2.png)
 
-![jacoco report](docs/images/jacoco3.png)
+![jacoco report](week_2/unit-testing-102/docs/images/jacoco3.png)
