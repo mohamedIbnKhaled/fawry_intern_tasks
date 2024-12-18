@@ -1,11 +1,11 @@
 package com.example.jakarta.product;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProductManger {
 
-    private final ArrayList<Product> productList = new ArrayList<>();
-
+    private final static List<Product> productList = new ArrayList<>();
 
     public Product searchProduct(String name){
         return productList.stream()
@@ -31,9 +31,12 @@ public class ProductManger {
     public void updateProduct(String name, String newName , double newPrice){
         Product product =searchProduct(name);
         if(product==null){
-            throw new IllegalStateException("there is a product with the same name");
+            throw new IllegalStateException("there is no product with the same name");
+        }else if(searchProduct(newName)!=null) {
+            throw new IllegalStateException("there is already product with the new name you want to add");
         }
         product.setName(newName);
         product.setPrice(newPrice);
     }
+
 }
