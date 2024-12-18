@@ -1,10 +1,13 @@
 package org.example;
 
-import product.PorductManager;
 import product.Product;
+import product.ProductManager;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
+        Product product = new Product("mohaemd",23);
+        ProductManager productManager = new ProductManager();
+        productManager.addProduct(product);
+        System.out.println(productManager.searchProduct("mohaemd"));
     }
 }
